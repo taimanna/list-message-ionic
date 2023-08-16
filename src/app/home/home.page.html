@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+      アプリにログイン
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,12 +9,34 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
+      <ion-title size="large">アプリにログイン</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <div class="login-container">
+    <!-- <h1>アプリにログイン</h1> -->
+
+    <ion-input label="ユーザID（メールアドレス）" label-placement="floating" fill="outline" type="email" errorText="Invalid email" [(ngModel)]="email" email></ion-input>
+    <ion-input label="パスワード" label-placement="floating" color="success" fill="outline" type="password" [(ngModel)]="password"></ion-input>
+
+    <div class="button-group">
+      <ion-button (click)="handleLoginWithPassword()">
+        ログイン
+      </ion-button>
+
+      <ion-button class="ion-no-padding" (click)="handleSignUpWithPassword()" fill="clear">
+        アカウント登録
+      </ion-button>
+    </div>
+
+    <h6>また</h6>
+    <div class="order-method">
+      <ion-button fill="clear" (click)="handleLoginWithGoogle()">
+        <ion-icon slot="start" name="logo-google" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear" (click)="handleLoginWithFacebook()">
+        <ion-icon slot="start" name="logo-facebook" slot="icon-only"></ion-icon>
+      </ion-button>
+    </div>
   </div>
 </ion-content>
