@@ -13,7 +13,7 @@ export class HomePage {
   constructor(private router: Router) {}
 
   handleLoginWithPassword() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/list-message']);
   }
 
   handleSignUpWithPassword() {}

@@ -1,0 +1,31 @@
+button {
+  background-color: #2f5597;
+  width: 100%;
+  height: 100%;
+}
+
+ion-input {
+  --highlight-color-focused: #2f5597;
+}
+
+ion-col {
+  display: flex;
+  align-items: center;
+}
+
+.ion-padding {
+  padding: 8px;
+}
+
+.ripple-parent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+  user-select: none;
+}
+
+ion-label {
+  padding-right: 8px;
+}

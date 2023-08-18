@@ -11,6 +11,10 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
+  {
+    path: 'list-message',
+    loadChildren: () => import('./pages/list-message/list-message.module').then( m => m.ListMessagePageModule)
+  },
 ];
 
 @NgModule({
