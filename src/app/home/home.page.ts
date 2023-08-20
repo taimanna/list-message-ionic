@@ -1,3 +1,4 @@
+import { FirebaseAuthService } from './../services/firebase-auth.service';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -7,16 +8,30 @@ import { Router } from '@angular/router';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  email: string = '';
-  password: string = '';
+  email: string = 'nhan78104@gmail.com';
+  password: string = '123456';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private firebaseAuthService: FirebaseAuthService
+  ) {}
 
   handleLoginWithPassword() {
-    this.router.navigate(['/list-message']);
+    this.firebaseAuthService
+      .signInWithPassword(this.email, this.password)
+      .then((res: any) => {
+        console.log(res.user.email);
+        this.router.navigate(['/list-message']);
+      })
+      .catch((error) => console.log(error));
   }
 
-  handleSignUpWithPassword() {}
+  handleSignUpWithPassword() {
+    this.firebaseAuthService
+      .signUpWithPassword(this.email, this.password)
+      .then((result) => console.log(result))
+      .catch((error) => console.log(error));
+  }
 
   handleLoginWithGoogle() {}
 

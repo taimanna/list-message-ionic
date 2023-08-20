@@ -1,63 +1,74 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>listMessage</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="handleSignOut()">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">listMessage</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-
+<ion-content [fullscreen]="true" *ngIf="userData">
   <div>
-    <h4 class="ion-padding">メッセージ</h4>
-
     <ion-grid>
       <ion-row>
         <ion-col size="9">
-          <ion-input fill="outline" type="text"></ion-input>
+          <ion-input label="メッセージ" label-placement="stacked" fill="outline" type="text" [(ngModel)]='newMessage.message'></ion-input>
         </ion-col>
         <ion-col size="3">
-          <button>投稿</button>
+          <button (click)="handleAddNewMessage()">投稿</button>
         </ion-col>
       </ion-row>
     </ion-grid>
   </div>
 
-  <ion-card>
+  <ion-card *ngFor="let message of threeMessages">
     <ion-card-header>
-      <ion-card-title>Awesome Title</ion-card-title>
+      <ion-card-title>{{message.payload.doc.data().message}}</ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
       <ion-grid fixed class="ion-no-padding">
         <ion-row>
           <ion-col size="4">
-            <div class="ion-activatable ripple-parent">
-              <ion-icon (click)="handleEdit()" class="ion-padding" name="pencil-sharp">
+            <div class="ion-activatable ripple-parent" (click)="handleEdit(message.payload.doc.id)">
+              <ion-icon class="ion-padding" name="pencil-sharp">
               </ion-icon>
               <ion-label>編集</ion-label>
               <ion-ripple-effect></ion-ripple-effect>
             </div>
           </ion-col>
           <ion-col size="4">
-            <div class="ion-activatable ripple-parent">
-              <ion-icon (click)="handleDelete()" class="ion-padding" name="close-sharp">
+            <div class="ion-activatable ripple-parent" (click)="handleDelete(message.payload.doc.id)">
+              <ion-icon class="ion-padding" name="close-sharp">
               </ion-icon>
               <ion-label>削除</ion-label>
               <ion-ripple-effect></ion-ripple-effect>
             </div>
           </ion-col>
           <ion-col class="ion-justify-content-end" size="4">
-            <ion-label>by 削除</ion-label>
+            <ion-label>by {{message.payload.doc.data().author}}</ion-label>
           </ion-col>
         </ion-row>
       </ion-grid>
     </ion-card-content>
   </ion-card>
-
-
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button slot="start" [disabled]="backButtonDisable" (click)="handleBack()" expand="block" fill="clear" shape="round">
+      <ion-icon name="chevron-back-outline"></ion-icon>
+      前へ
+    </ion-button>
+
+    <ion-title>Page {{page + 1}}</ion-title>
+
+    <ion-button slot="end" [disabled]="nextButtonDisable" (click)="handleNext()" expand="block" fill="clear" shape="round">
+      次へ
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>
