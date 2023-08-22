@@ -65,13 +65,13 @@ export class ListMessagePage implements OnInit {
       this.threeMessages = documents.slice(start, end);
       this.pageLength = Math.floor(documents.length / NUMBER_OF_ITEMS);
 
-      if (this.page * 3 + 3 >= documents.length) {
+      if (this.page * NUMBER_OF_ITEMS + NUMBER_OF_ITEMS >= documents.length) {
         this.nextButtonDisable = true;
       } else {
         this.nextButtonDisable = false;
       }
 
-      if (this.page * 3 >= documents.length && this.page !== 0) {
+      if (this.page * NUMBER_OF_ITEMS >= documents.length && this.page !== 0) {
         this.handleBack();
       }
     });
@@ -137,7 +137,6 @@ export class ListMessagePage implements OnInit {
   }
 
   handleBack() {
-    console.log(this.page);
     if (this.page > 0) {
       this.page -= 1;
       this.getThreeMessages(

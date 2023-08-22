@@ -20,16 +20,8 @@ export class HomePage {
     this.firebaseAuthService
       .signInWithPassword(this.email, this.password)
       .then((res: any) => {
-        console.log(res.user.email);
         this.router.navigate(['/list-message']);
       })
-      .catch((error) => console.log(error));
-  }
-
-  handleSignUpWithPassword() {
-    this.firebaseAuthService
-      .signUpWithPassword(this.email, this.password)
-      .then((result) => console.log(result))
       .catch((error) => console.log(error));
   }
 

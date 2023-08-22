@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      アプリにログイン
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <div class="sign-up-container">
+
+    <label for="email">ユーザID（メールアドレス）</label>
+    <ion-input id="email" fill="outline" type="email" [(ngModel)]="email"></ion-input>
+    <label for="password">パスワード</label>
+    <ion-input id="password" color="success" fill="outline" type="password" [(ngModel)]="password"></ion-input>
+    <label for="re-password">再確認パスワード</label>
+    <ion-input id="re-password" color="success" fill="outline" type="password" [(ngModel)]="rePassword"></ion-input>
+
+    <div class="button-group">
+      <ion-button [disabled]="!email || !password || !rePassword" (click)="handleSignUpWithPassword()">
+        登録
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,19 @@
+.sign-up-container {
+  margin: 6rem auto 0;
+  max-width: 80vw;
+  
+  h1 {
+    text-align: center;
+  }
+
+  ion-input  {
+    margin: 0 auto 1rem;
+  }
+
+  .button-group {
+    width: 80vw;
+    
+    display: flex;
+    justify-content: space-between;
+  }
+}
