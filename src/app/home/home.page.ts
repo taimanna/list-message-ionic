@@ -8,8 +8,8 @@ import { Router } from '@angular/router';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  email: string = 'nhan78104@gmail.com';
-  password: string = '123456';
+  email: string = '';
+  password: string = '';
 
   constructor(
     private router: Router,
@@ -25,7 +25,11 @@ export class HomePage {
       .catch((error) => console.log(error));
   }
 
-  handleLoginWithGoogle() {}
+  handleLoginWithGoogle() {
+    this.firebaseAuthService.signInWithGoogle();
+  }
 
-  handleLoginWithFacebook() {}
+  handleLoginWithFacebook() {
+    this.firebaseAuthService.signInWithFacebook();
+  }
 }

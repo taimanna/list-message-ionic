@@ -20,7 +20,23 @@ export class FirebaseAuthService {
       if (result.user) {
         const userEmail = result.user.email;
         const userName = result.user.displayName;
-        this.router.navigate(['/profile'], {
+        this.router.navigate(['/list-message'], {
+          queryParams: { email: userEmail, name: userName },
+        });
+      }
+    } catch (error) {
+      console.error('Error signing in with Google:', error);
+    }
+  }
+
+  async signInWithFacebook() {
+    try {
+      const provider = new firebase.auth.GithubAuthProvider();
+      const result = await this.afAuth.signInWithPopup(provider);
+      if (result.user) {
+        const userEmail = result.user.email;
+        const userName = result.user.displayName;
+        this.router.navigate(['/list-message'], {
           queryParams: { email: userEmail, name: userName },
         });
       }

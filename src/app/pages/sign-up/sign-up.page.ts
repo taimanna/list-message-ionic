@@ -8,9 +8,9 @@ import { FirebaseAuthService } from 'src/app/services/firebase-auth.service';
   styleUrls: ['./sign-up.page.scss'],
 })
 export class SignUpPage implements OnInit {
-  email: string = 'nhan78104@gmail.com';
-  password: string = '123456';
-  rePassword: string = '123456';
+  email: string = '';
+  password: string = '';
+  rePassword: string = '';
   constructor(
     private firebaseAuthService: FirebaseAuthService,
     private router: Router
