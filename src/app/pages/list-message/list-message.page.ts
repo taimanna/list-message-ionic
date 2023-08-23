@@ -7,6 +7,8 @@ import {
 } from 'src/app/services/firestore.service';
 import { IonModal } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
+import { formatDistance } from 'date-fns';
+import { ja } from 'date-fns/locale';
 
 const NUMBER_OF_ITEMS = 3;
 
@@ -18,7 +20,7 @@ const NUMBER_OF_ITEMS = 3;
 export class ListMessagePage implements OnInit {
   @ViewChild(IonModal) modal!: IonModal;
 
-  userData: boolean = true;
+  isToastOpen: boolean = false;
   userEmail: string = '';
   threeMessages: any[] = [];
   newMessage = new MessageItem();
@@ -26,6 +28,7 @@ export class ListMessagePage implements OnInit {
   pageLength: number = NaN;
   backButtonDisable: boolean = true;
   nextButtonDisable: boolean = false;
+  userUid: string = '';
 
   constructor(
     private fireAuthService: FirebaseAuthService,
@@ -40,16 +43,10 @@ export class ListMessagePage implements OnInit {
   }
 
   ngOnInit() {
-    this.fireAuthService
-      .getCurrentUser()
-      .then((user: any) => {
-        this.userEmail = this.changeToDot(user.email.split('@')[0]);
-      })
-      .then(() => {
-        if (this.userEmail) {
-          this.userData = true;
-        }
-      });
+    this.fireAuthService.getCurrentUser().then((user: any) => {
+      this.userUid = user.uid;
+      this.userEmail = this.changeToDot(user.email.split('@')[0]);
+    });
   }
 
   changeToDot(userEmail: string) {
@@ -60,10 +57,36 @@ export class ListMessagePage implements OnInit {
     return userEmail;
   }
 
+  setToastOpen(isOpen: boolean) {
+    this.isToastOpen = isOpen;
+  }
+
+  formatDate(timestamp: any) {
+    let formattedDate = '';
+
+    if (timestamp) {
+      formattedDate = formatDistance(new Date(timestamp * 1000), new Date(), {
+        addSuffix: true,
+        locale: ja,
+      });
+
+      formattedDate =
+        formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+    }
+
+    return formattedDate;
+  }
+
   getThreeMessages(start: number, end: number) {
     this.firestoreService.getAllMessages().subscribe((documents) => {
       this.threeMessages = documents.slice(start, end);
       this.pageLength = Math.floor(documents.length / NUMBER_OF_ITEMS);
+
+      this.threeMessages.forEach((message) => {
+        message.postingDay = this.formatDate(
+          message.payload.doc.data().createdTime.seconds
+        );
+      });
 
       if (this.page * NUMBER_OF_ITEMS + NUMBER_OF_ITEMS >= documents.length) {
         this.nextButtonDisable = true;
@@ -79,38 +102,42 @@ export class ListMessagePage implements OnInit {
 
   handleAddNewMessage() {
     this.newMessage.author = this.userEmail;
-    this.firestoreService.addNewMessage(this.newMessage);
+    this.firestoreService.addNewMessage(this.newMessage, this.userUid);
     this.newMessage.message = '';
   }
 
-  async handleEdit(id: string) {
-    const alert = await this.alertController.create({
-      header: 'メッセージを編集',
-      inputs: [
-        {
-          placeholder: 'New message',
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {},
-        },
-        {
-          text: 'OK',
-          role: 'confirm',
-          handler: (mes) => {
-            this.newMessage.author = this.userEmail;
-            this.newMessage.message = mes[0];
-            this.firestoreService.updateMessage(id, this.newMessage);
-            this.newMessage.message = '';
+  async handleEdit(id: string, authorUid: string) {
+    if (this.userUid === authorUid) {
+      const alert = await this.alertController.create({
+        header: 'メッセージを編集',
+        inputs: [
+          {
+            placeholder: 'New message',
           },
-        },
-      ],
-    });
+        ],
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => {},
+          },
+          {
+            text: 'OK',
+            role: 'confirm',
+            handler: (mes) => {
+              this.newMessage.author = this.userEmail;
+              this.newMessage.message = mes[0];
+              this.firestoreService.updateMessage(id, this.newMessage);
+              this.newMessage.message = '';
+            },
+          },
+        ],
+      });
 
-    await alert.present();
+      await alert.present();
+    } else {
+      this.setToastOpen(true);
+    }
   }
 
   async handleDelete(id: string) {

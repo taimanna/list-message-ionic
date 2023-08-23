@@ -7,7 +7,8 @@ import {
 export class MessageItem {
   message?: string;
   author?: string;
-  createdTime?: Date;
+  authorUid?: string;
+  createdTime?: any;
 }
 
 @Injectable({
@@ -26,8 +27,9 @@ export class FirestoreService {
     return this.tutorialsRef.snapshotChanges();
   }
 
-  addNewMessage(message: MessageItem) {
+  addNewMessage(message: MessageItem, userUid: string) {
     message.createdTime = new Date();
+    message.authorUid = userUid;
     return this.tutorialsRef.add({ ...message });
   }
 
