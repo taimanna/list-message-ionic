@@ -140,27 +140,31 @@ export class ListMessagePage implements OnInit {
     }
   }
 
-  async handleDelete(id: string) {
-    const alert = await this.alertController.create({
-      header: '確認',
-      subHeader: '削除しても良いですか？',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {},
-        },
-        {
-          text: 'OK',
-          role: 'confirm',
-          handler: () => {
-            this.firestoreService.deleteMessage(id);
+  async handleDelete(id: string, authorUid: string) {
+    if (this.userUid === authorUid) {
+      const alert = await this.alertController.create({
+        header: '確認',
+        subHeader: '削除しても良いですか？',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => {},
           },
-        },
-      ],
-    });
+          {
+            text: 'OK',
+            role: 'confirm',
+            handler: () => {
+              this.firestoreService.deleteMessage(id);
+            },
+          },
+        ],
+      });
 
-    await alert.present();
+      await alert.present();
+    } else {
+      this.setToastOpen(true);
+    }
   }
 
   handleBack() {
